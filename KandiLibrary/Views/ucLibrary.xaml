@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="KandiLibrary.Views.ucLibrary"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Border Background="White" Padding="5">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="196*"/>
+                <ColumnDefinition Width="137*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="5*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Width="Auto" Grid.ColumnSpan="2" Background="White">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0" x:Name="bxWord" Height="25" Width="150" HorizontalAlignment="Left" Margin="10,0,0,0" />
+                <ComboBox Grid.Column="1" x:Name="cbCategorySelection" Width="150" Height="25" HorizontalAlignment="Left" Margin="15,0,15,0" ItemsSource="{Binding CategoriesForComboBox}" SelectedItem="{Binding SelectedCategory}" />
+                <Button Grid.Column="1" x:Name="btnAddWord" Content="Add Word" Width="75" Height="25" HorizontalAlignment="Left" Margin="150,0,0,0" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=bxWord, Path=Text}" />
+                <Button Grid.Column="2" x:Name="btnDeleteWord" Content="Delete" Width="75" Height="25" HorizontalAlignment="Right" Margin="0,0,25,0" Command="{Binding DeleteWordCommand}" CommandParameter="{Binding ElementName=WordGrid, Path=SelectedItem}" />
+            </Grid>
+
+            <DataGrid Grid.Row="1" x:Name="WordGrid" ItemsSource="{Binding Words}" AutoGenerateColumns="False" CanUserAddRows="False" Grid.ColumnSpan="2" Margin="0,0,0,0" Grid.RowSpan="2">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Word" Binding="{Binding Word}" Width="*" />
+
+                    <DataGridTemplateColumn Header="Category" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <!-- Display the category value as text when not in edit mode -->
+                                <TextBlock Text="{Binding Category}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <!-- Display the category value as a ComboBox when in edit mode -->
+                                <ComboBox ItemsSource="{Binding DataContext.Categories, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                              SelectedItem="{Binding Category, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Border>
+</UserControl>
